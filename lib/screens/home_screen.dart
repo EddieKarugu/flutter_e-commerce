@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phanstore/widgets/custom_input_field.dart';
+import 'package:phanstore/widgets/product_container.dart';
 
 import '../dummy_data.dart';
 
@@ -31,23 +32,28 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             isWideScreen
                 ? const SizedBox()
-                :ShaderMask(shaderCallback: (Rect bounds){
-                  return LinearGradient(colors: [
-                    Colors.black,
-                    Colors.deepPurple,
-                    Colors.white
-                  ]).createShader(bounds);
-            }, blendMode: BlendMode.srcIn,
-            child: FittedBox(
-              child: Text(
-                'PHANSTORE',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40,
-                  letterSpacing: 6,
-                ),
-              ),
-            ),),
+                : ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        colors: [
+                          Theme.of(context).colorScheme.primary,
+                          Colors.deepPurple,
+                          Theme.of(context).colorScheme.secondary,
+                        ],
+                      ).createShader(bounds);
+                    },
+                    blendMode: BlendMode.srcIn,
+                    child: FittedBox(
+                      child: Text(
+                        'PHANSTORE',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                          letterSpacing: 6,
+                        ),
+                      ),
+                    ),
+                  ),
             Row(
               mainAxisAlignment: isWideScreen
                   ? MainAxisAlignment.center
@@ -75,13 +81,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: InkWell(
                     onTap: () {},
-                    splashColor: Colors.deepPurple,
+                    splashColor: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(12),
                     child: Container(
                       margin: const EdgeInsets.all(3),
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: Colors.deepPurple,
+                        color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(Icons.search, size: 40),
@@ -116,11 +122,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       backgroundColor: activeTile == index
-                          ? Colors.deepPurple
+                          ? Theme.of(context).colorScheme.primary
                           : null,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.deepPurple, width: 1),
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1,
+                        ),
                       ),
                       onPressed: () {
                         setState(() {
@@ -132,6 +141,29 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 itemCount: tiles.length,
                 scrollDirection: Axis.horizontal,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final bool isWideScreen = constraints.maxWidth > 1000;
+                  final bool isTablet =
+                      constraints.maxWidth > 600 && constraints.maxWidth < 1000;
+
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: isWideScreen ? 8 : isTablet ? 6 : 3,
+                      crossAxisSpacing: 4,
+                      childAspectRatio: .72,
+                      mainAxisSpacing: 4,
+                    ),
+                    itemBuilder: (context, index) {
+                      return ProductContainer(product: products[index]);
+                    },
+                    itemCount: products.length,
+                  );
+                },
               ),
             ),
           ],

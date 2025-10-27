@@ -54,8 +54,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 ),
               ],
               showSelectedLabels: true,
-              selectedItemColor: Colors.deepPurple,
-              unselectedItemColor: Colors.grey,
+              selectedItemColor: Theme.of(context).colorScheme.primary,
+              unselectedItemColor: Theme.of(context).colorScheme.secondary,
               currentIndex: activeScreenIndex,
               onTap: (int index) {
                 setState(() {
@@ -71,9 +71,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     const Spacer(),
                     ShaderMask(shaderCallback: (Rect bounds){
                       return LinearGradient(colors: [
-                        Colors.black,
+                        Theme.of(context).colorScheme.secondary,
                         Colors.deepPurple,
-                        Colors.white
+                        Theme.of(context).colorScheme.primary
                       ]).createShader(bounds);
                     },
                     blendMode: BlendMode.srcIn,
@@ -110,7 +110,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                               },
                               label: Text(titles[index]),
                               backgroundColor: activeScreenIndex == index
-                                  ? Colors.deepPurple
+                                  ? Theme.of(context).colorScheme.primary
                                   : null,
                             ),
                           );

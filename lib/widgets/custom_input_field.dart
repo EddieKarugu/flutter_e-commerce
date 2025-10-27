@@ -12,7 +12,7 @@ class CustomInputField extends StatelessWidget {
     final border =  OutlineInputBorder(
       borderRadius: BorderRadius.circular(20),
       borderSide: BorderSide(
-          color: Colors.deepPurple,
+          color: Theme.of(context).colorScheme.primary,
           width: 1
       ),
     );

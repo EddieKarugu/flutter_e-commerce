@@ -20,11 +20,40 @@ class MyApp extends StatelessWidget {
       builder: (context, currentTheme, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData.light(useMaterial3: true),
-          darkTheme: ThemeData.dark(useMaterial3: true),
+          theme: ThemeData.light(useMaterial3: true).copyWith(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Color(0xFFE4002B), // Main branding color as seed
+              primary: Color(0xFFE4002B),
+              onPrimary: Colors.white, // Good contrast for text/icons on primary
+              secondary: Color(0xFFFCCF03),
+              onSecondary: Colors.black,
+              surface: Colors.white,
+              onSurface: Colors.black87,
+              background: Colors.white,
+              error: Color(0xFFB00020),
+              onError: Colors.white,
+            ),
+          ),
+          darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
+            colorScheme:   ColorScheme.fromSeed(
+              seedColor: Color(0xFFE4002B), // Use the same seed color
+              brightness: Brightness.dark,
+              primary: Color(0xFFE4002B),
+              onPrimary: Colors.white,
+              secondary: Color(0xFFFCCF03),
+              onSecondary: Colors.black,
+              surface: Color(0xFF1E1E1E),
+              onSurface: Colors.white70,
+              background: Color(0xFF121212),
+              error: Color(0xFFCF6679),
+              onError: Colors.black,
+            ),
+          ),
           home: LandingScreen(),
-          themeMode: currentTheme == 0? ThemeMode.light
-              : currentTheme == 1? ThemeMode.dark
+          themeMode: currentTheme == 0
+              ? ThemeMode.light
+              : currentTheme == 1
+              ? ThemeMode.dark
               : ThemeMode.system,
         );
       },

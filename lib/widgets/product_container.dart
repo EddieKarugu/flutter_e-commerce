@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phanstore/screens/product_details_screen.dart';
 
 class ProductContainer extends StatelessWidget {
   final Map<String, dynamic> product;
@@ -13,7 +14,6 @@ class ProductContainer extends StatelessWidget {
       height: 200,
       width: 120,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
         border: Border.all(
           color: Theme.of(context).colorScheme.secondary,
           width: 1,
@@ -31,59 +31,71 @@ class ProductContainer extends StatelessWidget {
                   image: AssetImage('assets/images/${product['image']}'),
                   fit: BoxFit.contain,
                 ),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.secondary,
-                  width: 1,
-                ),
               ),
               child: Container(),
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
-            ),
+          Card(
+            shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(12))
+          ),
+            elevation: 10,
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
+                Align(
+                  alignment: Alignment.centerLeft,
                   child: FittedBox(
                     child: Text(
                       product['name'],
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17
+                      ),
                     ),
                   ),
                 ),
-                Text(
-                  'Ksh ${product['price']}',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: FittedBox(
+                    child: Text(
+                      'Ksh ${product['price']}',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          splashColor: Theme.of(context).colorScheme.secondary,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            bottomRight: Radius.circular(12),
-                          ),
-                          onTap: (){},
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            margin: const EdgeInsets.only(top: 3, left: 3),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondary,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                bottomRight: Radius.circular(12),
-                              ),
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        splashColor: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          bottomRight: Radius.circular(12),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductDetailsScreen(product: product),
                             ),
-                            child: Icon(Icons.arrow_forward),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          margin: const EdgeInsets.only(top: 3, left: 3),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              bottomRight: Radius.circular(12),
+                            ),
                           ),
+                          child: Icon(Icons.arrow_forward),
                         ),
                       ),
+                    ),
                   ],
                 ),
               ],

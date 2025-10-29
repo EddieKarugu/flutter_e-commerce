@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phanstore/controllers/theme_controller.dart';
+import 'package:phanstore/initializers/get_initializer.dart';
 import 'package:phanstore/screens/landingScreen.dart';
 
 import 'initializers/shared_preferences.dart';
@@ -7,6 +8,7 @@ import 'initializers/shared_preferences.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserPrefs.init();
+  GetInit.initializeControllers();
   runApp(MyApp());
 }
 
@@ -22,10 +24,10 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData.light(useMaterial3: true).copyWith(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Color(0xFFE4002B), // Main branding color as seed
-              primary: Color(0xFFE4002B),
+              seedColor: Color(0xFFa31621), // Main branding color as seed
+              primary: Color(0xFFa31621),
               onPrimary: Colors.white, // Good contrast for text/icons on primary
-              secondary: Color(0xFFFCCF03),
+              secondary: Color(0xFFff9f1c),
               onSecondary: Colors.black,
               surface: Colors.white,
               onSurface: Colors.black87,

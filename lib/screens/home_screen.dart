@@ -26,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final bool isWideScreen = screenSize.width > 600;
+    final bool isTablet = screenSize.width > 400 && screenSize.width < 850;
+
 
     return Scaffold(
       body: SafeArea(
@@ -64,8 +66,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   isWideScreen
                       ? Container(
-                          constraints: BoxConstraints(maxWidth: 600),
+                          constraints: BoxConstraints(maxWidth:isTablet? 400: 600),
                           child: CustomInputField(
+                            onChanged: (value) {
+                              setState(() {
+                                displayProducts = products
+                                    .where(
+                                      (product) => product['name']
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()) ||
+                                          product['category']
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(value.toLowerCase()),
+                                    )
+                                    .toList();
+                              });
+                            },
                             icon: Icons.search,
                             hint: 'Search Food items here',
                             controller: searchController,
@@ -74,6 +92,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         )
                       : Expanded(
                           child: CustomInputField(
+                            onChanged: (value) {
+                              setState(() {
+                                displayProducts = products
+                                    .where(
+                                      (product) => product['name']
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()) ||
+                                          product['category']
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(value.toLowerCase()),
+                                    )
+                                    .toList();
+                              });
+                            },
                             icon: Icons.search,
                             hint: 'Search Food items here',
                             controller: searchController,
@@ -83,8 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: InkWell(
-                      onTap: () {
-                      },
+                      onTap: () {},
                       splashColor: Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(12),
                       child: Container(
@@ -102,8 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(
                 height: 70,
-                child:
-                ListView.builder(
+                child: ListView.builder(
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
@@ -139,18 +171,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           setState(() {
                             activeTile = index;
-                            activeTile == 0? displayProducts = products
-                                :displayProducts = products
-                                .where(
-                                  (product) =>
-                              product['category']
-                                  .toString()
-                                  .toLowerCase() ==
-                                  tiles[activeTile]['name']
-                                      .toString()
-                                      .toLowerCase(),
-                            )
-                                .toList();
+                            activeTile == 0
+                                ? displayProducts = products
+                                : displayProducts = products
+                                      .where(
+                                        (product) =>
+                                            product['category']
+                                                .toString()
+                                                .toLowerCase() ==
+                                            tiles[activeTile]['name']
+                                                .toString()
+                                                .toLowerCase(),
+                                      )
+                                      .toList();
                           });
                         },
                       ),
@@ -169,24 +202,27 @@ class _HomeScreenState extends State<HomeScreen> {
                         constraints.maxWidth > 600 &&
                         constraints.maxWidth < 1000;
 
-                    return displayProducts.isEmpty? const Text('No Such Items Found'):GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: isWideScreen
-                            ? 8
-                            : isTablet
-                            ? 6
-                            : 3,
-                        crossAxisSpacing: 4,
-                        childAspectRatio: .72,
-                        mainAxisSpacing: 4,
-                      ),
-                      itemBuilder: (context, index) {
-                        return ProductContainer(
-                          product: displayProducts[index],
-                        );
-                      },
-                      itemCount: displayProducts.length,
-                    );
+                    return displayProducts.isEmpty
+                        ? const Text('No Such Items Found')
+                        : GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: isWideScreen
+                                      ? 8
+                                      : isTablet
+                                      ? 6
+                                      : 3,
+                                  crossAxisSpacing: 4,
+                                  childAspectRatio: .72,
+                                  mainAxisSpacing: 4,
+                                ),
+                            itemBuilder: (context, index) {
+                              return ProductContainer(
+                                product: displayProducts[index],
+                              );
+                            },
+                            itemCount: displayProducts.length,
+                          );
                   },
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:phanstore/controllers/CartController.dart';
 import 'package:phanstore/widgets/product_container.dart';
-
+import 'package:get/get.dart';
 import '../dummy_data.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -12,7 +13,6 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  bool isCarted = false;
   bool isFaved = false;
   bool isStarred = false;
 
@@ -21,6 +21,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final screenSize = MediaQuery.of(context).size;
     final bool isWideScreen = screenSize.width > 600;
     final width = screenSize.width;
+
+    CartController cartController = Get.find();
 
     return Scaffold(
       body: SafeArea(
@@ -131,45 +133,57 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             const SizedBox(height: 20),
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 3000),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isCarted = !isCarted;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: isCarted
-                                      ? Colors.green
-                                      : Theme.of(context).colorScheme.primary,
-                                  foregroundColor: Colors.white,
-                                  maximumSize: const Size(300, 50),
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 22,
-                                    horizontal: 10,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      isCarted ? 10 : 30,
-                                    ),
-                                  ),
-                                ),
-                                child: isCarted
-                                    ? Row(
+                              child: Obx(
+                                      () {
+                                    bool isCarted = cartController.cartItems.contains(widget.product);
+                                    return ElevatedButton(
+                                      onPressed: () {
+
+                                        setState(() {
+                                          isCarted
+                                              ? cartController.removeFromCart(
+                                            widget.product,
+                                          )
+                                              : cartController.addToCart(
+                                            widget.product,
+                                          );
+                                        });
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: isCarted
+                                            ? Colors.green
+                                            : Theme.of(context).colorScheme.primary,
+                                        foregroundColor: Colors.white,
+                                        maximumSize: const Size(300, 50),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 22,
+                                          horizontal: 10,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            isCarted ? 10 : 30,
+                                          ),
+                                        ),
+                                      ),
+                                      child: isCarted
+                                          ? Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        MainAxisAlignment.center,
                                         children: [
                                           Icon(Icons.check),
                                           Text('Added to Cart'),
                                         ],
                                       )
-                                    : Row(
+                                          : Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        MainAxisAlignment.center,
                                         children: [
                                           Icon(Icons.shopping_cart),
                                           Text('Add to Cart'),
                                         ],
                                       ),
+                                    );
+                                  }
                               ),
                             ),
                           ],
@@ -237,41 +251,45 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                     Align(
-                       alignment: Alignment.centerLeft,
-                       child:  Text('${widget.product['name']}',
-                         style: TextStyle(
-                           color: Theme.of(context).colorScheme.secondary,
-                           fontSize: 20,
-                           fontWeight: FontWeight.bold,
-                         )
-                       ),
-                     ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${widget.product['name']}',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       Text(
                         'Bursting with Freshness & Flavor: Dive into a vibrant symphony of garden-fresh ingredients, expertly combined to invigorate your palate and nourish your body. Pure, wholesome goodness in every colorful mouthful.'
                         '${widget.product['description']}',
                       ),
                       const SizedBox(height: 10),
-                     Align(
-                       alignment: Alignment.centerLeft,
-                       child:  Row(
-                         children: [
-                           Text('Price: ',
-                             style: TextStyle(
-                               fontSize: 20,
-                               fontWeight: FontWeight.bold,
-                           ),
-                                                ),
-                           Text('Ksh ${widget.product['price']}',
-                             style: TextStyle(
-                               color: Theme.of(context).colorScheme.secondary,
-                               fontSize: 20,
-                               fontWeight: FontWeight.bold,
-                             ),
-                           ),
-                         ],
-                       )),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: [
+                            Text(
+                              'Price: ',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Ksh ${widget.product['price']}',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       const SizedBox(height: 20),
                       SizedBox(
                         height: 200,
@@ -378,45 +396,54 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           const SizedBox(height: 20),
                           AnimatedContainer(
                             duration: const Duration(milliseconds: 1200),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  isCarted = !isCarted;
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: isCarted
-                                    ? Colors.green
-                                    : Theme.of(context).colorScheme.primary,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 22,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    isCarted ? 10 : 30,
-                                  ),
-                                ),
-                                maximumSize: const Size(300, 50),
-                              ),
-                              child: isCarted
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.check),
-                                        Text('Added to Cart'),
-                                      ],
+                            child: Obx(
+                              () {
+                                bool isCarted = cartController.cartItems.contains(widget.product);
+                                return ElevatedButton(
+                                  onPressed: () {
+                                    isCarted
+                                        ? cartController.removeFromCart(
+                                      widget.product,
                                     )
-                                  : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.shopping_cart),
-                                        Text('Add to Cart'),
-                                      ],
+                                        : cartController.addToCart(
+                                      widget.product,
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: isCarted
+                                        ? Colors.green
+                                        : Theme.of(context).colorScheme.primary,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 22,
                                     ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        isCarted ? 10 : 30,
+                                      ),
+                                    ),
+                                    maximumSize: const Size(300, 50),
+                                  ),
+                                  child: isCarted
+                                      ? Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.check),
+                                      Text('Added to Cart'),
+                                    ],
+                                  )
+                                      : Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.shopping_cart),
+                                      Text('Add to Cart'),
+                                    ],
+                                  ),
+                                );
+                              }
                             ),
                           ),
                         ],

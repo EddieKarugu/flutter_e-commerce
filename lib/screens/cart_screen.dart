@@ -11,7 +11,7 @@ class CartScreen extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     final bool isWideScreen = screenSize.width > 600;
     final bool isTabletScreen =
-        screenSize.width > 400 && screenSize.width < 850;
+        screenSize.width > 400 && screenSize.width < 1000;
 
     CartController cartController = Get.find();
     return Scaffold(

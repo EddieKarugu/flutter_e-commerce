@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData.light(useMaterial3: true).copyWith(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Color(0xFFa31621), // Main branding color as seed
-              primary: Color(0xFFa31621),
+              seedColor: Color(0xFFfa3d3b), // Main branding color as seed
+              primary: Color(0xFFfa3d3b),
               onPrimary: Colors.white, // Good contrast for text/icons on primary
               secondary: Color(0xFFff9f1c),
               onSecondary: Colors.black,
